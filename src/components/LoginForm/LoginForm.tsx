@@ -21,7 +21,7 @@ export default function LoginForm({}: LoginFormProps) {
 
   return (
     <Card sx={{padding: 2}}>
-      <Stack direction="column" spacing={2} as="form">
+      <Stack direction="column" spacing={2} component="form">
         
         <Link onClick={() => setIsNewby(!isNewby)} sx={{cursor: "pointer", textAlign: "right"}}>
           {isNewby ? "я уже зарегистрирован" : "я тут впервые"}
@@ -42,7 +42,9 @@ export default function LoginForm({}: LoginFormProps) {
             setFormData((d) => ({ ...d, confirm_password: e.target.value }))
           } type="password" /> }
         
-        <Button type="submit" ></Button>
+        <Button type="submit" >
+          Войти
+        </Button>
 
       </Stack>
     </Card>

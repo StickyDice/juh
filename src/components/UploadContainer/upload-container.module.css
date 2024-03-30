@@ -1,0 +1,58 @@
+.uploadButton {
+  width: fit-content;
+  border-style: dashed;
+}
+
+.uploadContainer {
+  display: flex;
+  align-items: center;
+  padding: 16px;
+  width: max(80vw, 300px);
+  height: 70dvh;
+  border: 2px dashed rgb(var(--primary-color-rgb));
+  border-radius: 8px;
+}
+
+.orTypography {
+  position: relative;
+  text-align: center;
+}
+
+.orTypography::after {
+  content: "";
+  position: absolute;
+  width: 70px;
+  height: 2px;
+  top: 50%;
+  left: calc(100% + 5px);
+  background-color: rgb(var(--primary-color-rgb));
+}
+
+.orTypography::before {
+  content: "";
+  position: absolute;
+  width: 70px;
+  height: 2px;
+  top: 50%;
+  right: calc(100% + 5px);
+  background-color: rgb(var(--primary-color-rgb));
+}
+
+.styledStack {
+
+  width: 310px;
+  align-items: center;
+}
+
+.fuckedStyledLineDivider {
+  height: 1px;
+}
+
+.uploadedFilesTypographyContainer {
+  width: 100%;
+  align-items: flex-start; 
+}
+
+/* .uploadedFilesTypography {
+  text-align: left;
+} */

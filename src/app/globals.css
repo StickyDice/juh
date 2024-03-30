@@ -70,6 +70,8 @@
     --callout-border-rgb: 108, 108, 108;
     --card-rgb: 100, 100, 100;
     --card-border-rgb: 200, 200, 200;
+    --primary-color-rgb: calc(144*0.8), calc(202*0.8), calc(249*0.8);
+    --inherit-color-rgb: 0, 0, 0;
   }
 }
 
@@ -106,4 +108,5 @@ a {
   min-height: 100dvh;
   align-items: center;
   justify-content: center;
+  position: relative;
 }

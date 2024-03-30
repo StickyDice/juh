@@ -24,8 +24,8 @@ export class CookiesManager {
     // client side :
     if (document && document.cookie) {
       document.cookie = `${name}=${value};expires=${options.expires.toUTCString()};path=/;`;
-    } 
-    // server side : 
+    }
+    // server side :
     else {
       cookies().set(name, value, {
         expires: options.expires.getTime(),

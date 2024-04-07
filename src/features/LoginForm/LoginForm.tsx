@@ -22,28 +22,21 @@ export default function LoginForm({}: LoginFormProps) {
   return (
     <Card sx={{ py: 2, px: 3, minWidth: "30vw" }}>
       <Stack direction="column" spacing={2}>
-        <Link
-          onClick={() => setIsNewby(!isNewby)}
-          sx={{ cursor: "pointer", textAlign: "right" }}
-        >
+        <Link onClick={() => setIsNewby(!isNewby)} sx={{ cursor: "pointer", textAlign: "right" }}>
           {isNewby ? "я уже зарегистрирован" : "я тут впервые"}
         </Link>
 
         <TextField
           label="Почта"
           value={formData.email}
-          onChange={(e) =>
-            setFormData((d) => ({ ...d, email: e.target.value }))
-          }
+          onChange={(e) => setFormData((d) => ({ ...d, email: e.target.value }))}
           variant="standard"
         />
 
         <TextField
           label="Пароль"
           value={formData.password}
-          onChange={(e) =>
-            setFormData((d) => ({ ...d, password: e.target.value }))
-          }
+          onChange={(e) => setFormData((d) => ({ ...d, password: e.target.value }))}
           type="password"
           variant="standard"
         />
@@ -52,17 +45,13 @@ export default function LoginForm({}: LoginFormProps) {
           <TextField
             label="Подтверждение пароля"
             value={formData.confirm_password}
-            onChange={(e) =>
-              setFormData((d) => ({ ...d, confirm_password: e.target.value }))
-            }
+            onChange={(e) => setFormData((d) => ({ ...d, confirm_password: e.target.value }))}
             type="password"
             variant="standard"
           />
         )}
 
-        <Button type="submit">
-          {isNewby ? "Зарегистрироваться" : "Войти"}
-        </Button>
+        <Button type="submit">{isNewby ? "Зарегистрироваться" : "Войти"}</Button>
       </Stack>
     </Card>
   );

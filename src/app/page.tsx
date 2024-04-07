@@ -5,7 +5,5 @@ export default function Home() {
   const jwt = CookiesManager.get("jwt");
   if (!jwt) return <LoginForm />;
 
-  
-
   return <></>;
 }

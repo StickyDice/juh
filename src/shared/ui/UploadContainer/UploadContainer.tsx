@@ -5,7 +5,7 @@ import styles from "./upload-container.module.css";
 import CloudUpload from "@mui/icons-material/CloudUpload";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
-import LineDivider from "~/components/LineDivider/LineDivider";
+import LineDivider from "~/shared/ui/LineDivider/LineDivider";
 import Switch from "@mui/material/Switch";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import TextField from "@mui/material/TextField";

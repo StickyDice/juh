@@ -1,5 +1,5 @@
-import LoginForm from "~/features/LoginForm";
-import { CookiesManager } from "~/lib/CookiesManager";
+import { LoginForm } from "~/features/auth/ui";
+import { CookiesManager } from "~/shared/lib/CookiesManager";
 
 export default function Home() {
   const jwt = CookiesManager.get("jwt");

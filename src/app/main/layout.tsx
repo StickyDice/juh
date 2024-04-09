@@ -1,6 +1,6 @@
 import Logout from "@mui/icons-material/Logout";
 import IconButton from "@mui/material/IconButton";
-import UploadContainer from "~/components/UploadContainer/UploadContainer";
+import UploadContainer from "~/shared/ui/UploadContainer/UploadContainer";
 import Stack from "@mui/material/Stack";
 
 export default function Layout() {

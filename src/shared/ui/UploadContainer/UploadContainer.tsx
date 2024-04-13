@@ -26,13 +26,13 @@ export default function UploadContainer() {
   };
 
   const containerClassName = `${styles.smoothHeightChange} ${selectedFiles.length ? styles.uploadContainer : styles.uploadContainerEmpty}`;
-  console.log(containerClassName);
   return (
     <Stack spacing={2} className={containerClassName}>
       <input
         onChange={handleInputChange}
         onDrop={handleOnDrop}
         className={styles.containerFileInput}
+        multiple
       />
       <Stack spacing={1} className={styles.styledStack}>
         <Typography color="secondary">Перетащите файлы сюда</Typography>
@@ -49,7 +49,9 @@ export default function UploadContainer() {
           <LineDivider />
           <Stack className={styles.uploadedFilesTypographyContainer}>
             <Typography color="secondary">Загруженные файлы:</Typography>
-            <Typography color="secondary">fil1.txt, file2.php, file3.cock</Typography>
+            <Typography color="secondary">
+              {selectedFiles.map((file) => file.name).join(", ")}
+            </Typography>
           </Stack>
           <LineDivider />
           <Stack className={styles.uploadedFilesTypographyContainer}>

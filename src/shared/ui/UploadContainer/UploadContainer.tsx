@@ -10,19 +10,34 @@ import Switch from "@mui/material/Switch";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import TextField from "@mui/material/TextField";
 import { ChangeEvent, DragEvent, useState } from "react";
+import { reachFilesFromDataTransfer } from "~/shared/utils/reachFilesFromDataTransfer";
 
 export default function UploadContainer() {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
 
-  const handleOnDrop = (e: DragEvent<HTMLInputElement>) => {
+  const handleOnDrop = async (e: DragEvent<HTMLInputElement>) => {
     e.preventDefault();
     e.stopPropagation();
-    if (e.dataTransfer.files) setSelectedFiles([...selectedFiles, e.dataTransfer.files[0]]);
+
+    const files: File[] = [];
+    for (let i = 0; i < e.dataTransfer.items.length; i++) {
+      const item = e.dataTransfer.items[i];
+      if (item.kind !== "file") continue;
+
+      const uploaded: File[] = await reachFilesFromDataTransfer(item);
+      files.push(...uploaded);
+    }
+
+    if (e.dataTransfer.files) setSelectedFiles([...selectedFiles, ...files]);
   };
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
-    if (e.target.files) setSelectedFiles([...selectedFiles, e.target.files[0]]);
+    if (!e.target.files) return;
+
+    const uploaded: File[] = [];
+    for (let i = 0; i < e.target.files.length; i++) uploaded.push(e.target.files[i]);
+    setSelectedFiles([...selectedFiles, ...uploaded]);
   };
 
   const containerClassName = `${styles.smoothHeightChange} ${selectedFiles.length ? styles.uploadContainer : styles.uploadContainerEmpty}`;
@@ -39,8 +54,17 @@ export default function UploadContainer() {
         <Typography color="secondary" className={styles.orTypography}>
           или
         </Typography>
-        <Button variant="contained" className={styles.uploadButton} startIcon={<CloudUpload />}>
-          <input type="file" className={styles.visuallyHiddenInput} onChange={handleInputChange} />
+        <Button
+          variant="contained"
+          className={styles.uploadButton}
+          startIcon={<CloudUpload />}
+        >
+          <input
+            type="file"
+            className={styles.visuallyHiddenInput}
+            onChange={handleInputChange}
+            multiple
+          />
           Нажмите чтобы выбрать файл
         </Button>
       </Stack>
@@ -57,7 +81,9 @@ export default function UploadContainer() {
           <Stack className={styles.uploadedFilesTypographyContainer}>
             <Typography color="secondary">Параметры</Typography>
             <FormControlLabel
-              control={<Switch inputProps={{ "aria-label": "Доступна всем" }} />}
+              control={
+                <Switch inputProps={{ "aria-label": "Доступна всем" }} />
+              }
               label={<Typography color="secondary">Доступна всем</Typography>}
             />
           </Stack>

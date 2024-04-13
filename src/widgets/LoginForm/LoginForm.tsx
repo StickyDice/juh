@@ -52,7 +52,7 @@ export function LoginForm({}: LoginFormProps) {
       { login: formData.email, password: formData.password },
       isNewby ? "register" : "login",
     );
-    if (response) router.push("/main");
+    if (typeof response === "boolean") router.push("/main");
     else throw new Error("Login error");
   };
 

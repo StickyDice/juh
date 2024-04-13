@@ -2,13 +2,13 @@
 
 import Logout from "@mui/icons-material/Logout";
 import IconButton from "@mui/material/IconButton";
-import UploadContainer from "~/shared/ui/UploadContainer/UploadContainer";
 import Stack from "@mui/material/Stack";
 import { useRouter } from "next/navigation";
+import { CookiesManagerClient } from "~/shared/lib/ClientCookiesManager";
+import { UploadContainer } from "~/widgets/UploadContainer";
 
-export default function Layout() {
+export function Upload() {
   const router = useRouter();
-  console.log("Cookies", document.cookie);
   return (
     <Stack>
       <IconButton
@@ -18,6 +18,7 @@ export default function Layout() {
           top: "8px",
         }}
         onClick={() => {
+          CookiesManagerClient.remove(document.cookie);
           router.push("/");
         }}
       >

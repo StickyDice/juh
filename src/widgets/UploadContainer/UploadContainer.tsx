@@ -5,14 +5,14 @@ import styles from "./upload-container.module.css";
 import CloudUpload from "@mui/icons-material/CloudUpload";
 import Typography from "@mui/material/Typography";
 import Stack from "@mui/material/Stack";
-import LineDivider from "~/shared/ui/LineDivider/LineDivider";
 import Switch from "@mui/material/Switch";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import TextField from "@mui/material/TextField";
 import { ChangeEvent, DragEvent, useState } from "react";
 import { reachFilesFromDataTransfer } from "~/shared/utils/reachFilesFromDataTransfer";
+import { LineDivider } from "~/shared/ui";
 
-export default function UploadContainer() {
+export function UploadContainer() {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
 
   const handleOnDrop = async (e: DragEvent<HTMLInputElement>) => {
@@ -54,11 +54,7 @@ export default function UploadContainer() {
         <Typography color="secondary" className={styles.orTypography}>
           или
         </Typography>
-        <Button
-          variant="contained"
-          className={styles.uploadButton}
-          startIcon={<CloudUpload />}
-        >
+        <Button variant="contained" className={styles.uploadButton} startIcon={<CloudUpload />}>
           <input
             type="file"
             className={styles.visuallyHiddenInput}
@@ -81,9 +77,7 @@ export default function UploadContainer() {
           <Stack className={styles.uploadedFilesTypographyContainer}>
             <Typography color="secondary">Параметры</Typography>
             <FormControlLabel
-              control={
-                <Switch inputProps={{ "aria-label": "Доступна всем" }} />
-              }
+              control={<Switch inputProps={{ "aria-label": "Доступна всем" }} />}
               label={<Typography color="secondary">Доступна всем</Typography>}
             />
           </Stack>

@@ -1,11 +1,30 @@
 export function checkIsAuthenticated() {}
 
-export async function login(params: { login: string; password: string }) {
-  const authResult = await fetch("fakedUrl", {
+type SignParamsType = {
+  login: string;
+  password: string;
+};
+
+async function login(params: SignParamsType): Promise<boolean> {
+  const authResult = await fetch("http://localhost:8000/users/login", {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json;charset=utf-8",
-    },
     body: JSON.stringify(params),
-  });
+  }).then((response) => response.json());
+  return authResult;
+}
+
+async function register(params: SignParamsType): Promise<boolean> {
+  const registerResult = await fetch("http://localhost:8000/users/register", {
+    method: "POST",
+    body: JSON.stringify(params),
+  }).then((response) => response.json());
+  return registerResult;
+}
+
+export async function authenticationStrategy(
+  params: SignParamsType,
+  strategy: "login" | "register",
+) {
+  if (strategy === "login") return login(params);
+  return register(params);
 }

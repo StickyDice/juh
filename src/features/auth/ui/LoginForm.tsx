@@ -2,7 +2,12 @@
 
 import { useState } from "react";
 import { Button, Card, Link, Stack, TextField } from "@mui/material";
-import { validateEmail, validatePassword, validatePasswordRepeat } from "~/features/auth/lib";
+import {
+  authenticationStrategy,
+  validateEmail,
+  validatePassword,
+  validatePasswordRepeat,
+} from "~/features/auth/lib";
 import { useRouter } from "next/navigation";
 
 interface LoginFormProps {}
@@ -26,7 +31,6 @@ export function LoginForm({}: LoginFormProps) {
   });
 
   const onBlurEmail = () => {
-    console.log("onblur");
     if (!validateEmail(formData.email)) setIsEmailError(true);
     else setIsEmailError(false);
   };
@@ -43,8 +47,13 @@ export function LoginForm({}: LoginFormProps) {
     else setIsPasswordRepeatError(false);
   };
 
-  const onSubmit = () => {
-    router.push("/main");
+  const onSubmit = async () => {
+    const response = await authenticationStrategy(
+      { login: formData.email, password: formData.password },
+      isNewby ? "register" : "login",
+    );
+    if (response) router.push("/main");
+    else throw new Error("Login error");
   };
 
   return (

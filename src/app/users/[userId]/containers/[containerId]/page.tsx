@@ -11,6 +11,8 @@ type Props = {
   params: { userId: string; containerId: string };
 };
 export default async function Page({ params }: Props) {
+  // TODO: Возможно не получится оставить страницу server-side компонентом. Надо подумать как лучше сделать
+
   async function getData() {
     const res = await getContainerInfo(params.userId, params.containerId);
     if (res.status === 401) {

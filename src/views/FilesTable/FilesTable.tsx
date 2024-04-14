@@ -1,8 +1,7 @@
-import React from "react";
-import "./files-table.module.scss";
 import { FileDownload, Delete } from "@mui/icons-material";
 import { Table, TableHead, TableRow, TableCell, TableBody, IconButton } from "@mui/material";
 import { deleteContainer } from "~/services/deleteContainer";
+import "./files-table.module.css";
 
 interface FilesTableProps {
   files: string[][];
@@ -14,7 +13,7 @@ interface FilesTableProps {
 }
 
 export default function FilesTable({ files, isOwner, containerInfo }: FilesTableProps) {
-  // TODO: хочу чтобы компонент был серверным, поэтому нельзя использовать useState и useEffect
+  // TODO: Не уверен что хочу делать всю таблицу целиком client-side компонентом. Надо подумать
 
   async function handleDeleteClick(filename: string) {
     deleteContainer(containerInfo.userId, containerInfo.containerId, filename);
@@ -43,10 +42,7 @@ export default function FilesTable({ files, isOwner, containerInfo }: FilesTable
             </TableCell>
             {isOwner && (
               <TableCell>
-                <IconButton
-                  color="error"
-                  onClick={() => handleDeleteClick(`${file[0]}.${file[1]}`)}
-                >
+                <IconButton color="error">
                   <Delete />
                 </IconButton>
               </TableCell>

@@ -4,7 +4,7 @@ import Logout from "@mui/icons-material/Logout";
 import IconButton from "@mui/material/IconButton";
 import Stack from "@mui/material/Stack";
 import { useRouter } from "next/navigation";
-import { CookiesManagerClient } from "~/shared/lib/ClientCookiesManager";
+import { CookiesManager } from "~/shared/lib";
 import { UploadContainer } from "~/widgets/UploadContainer";
 
 export function Upload() {
@@ -18,8 +18,8 @@ export function Upload() {
           top: "8px",
         }}
         onClick={() => {
-          CookiesManagerClient.remove(document.cookie);
-          router.push("/");
+          CookiesManager.remove("jwt");
+          router.push("/auth");
         }}
       >
         <Logout></Logout>

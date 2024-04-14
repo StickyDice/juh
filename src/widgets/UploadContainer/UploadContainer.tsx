@@ -8,12 +8,15 @@ import Stack from "@mui/material/Stack";
 import Switch from "@mui/material/Switch";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import TextField from "@mui/material/TextField";
-import { ChangeEvent, DragEvent, useState } from "react";
+import { ChangeEvent, DragEvent, MouseEvent, useState } from "react";
 import { reachFilesFromDataTransfer } from "~/shared/utils/reachFilesFromDataTransfer";
 import { LineDivider } from "~/shared/ui";
+import { useRouter } from "next/navigation";
+import { createContainer } from "~/services/createContainer";
 
 export function UploadContainer() {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
+  const router = useRouter();
 
   const handleOnDrop = async (e: DragEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -38,6 +41,13 @@ export function UploadContainer() {
     const uploaded: File[] = [];
     for (let i = 0; i < e.target.files.length; i++) uploaded.push(e.target.files[i]);
     setSelectedFiles([...selectedFiles, ...uploaded]);
+  };
+
+  const onSubmit = async (e: MouseEvent<HTMLButtonElement>) => {
+    const data = new FormData();
+    selectedFiles.forEach((file) => data.append(file.name, file));
+    const containerLink = await createContainer(data).then((res) => res.json());
+    router.push(containerLink);
   };
 
   const containerClassName = `${styles.smoothHeightChange} ${selectedFiles.length ? styles.uploadContainer : styles.uploadContainerEmpty}`;
@@ -86,6 +96,9 @@ export function UploadContainer() {
             <Typography color="secondary">Название папки</Typography>
             <TextField placeholder="Без названия" variant="standard" />
           </Stack>
+          <Button variant="contained" onClick={onSubmit}>
+            Загрузить
+          </Button>
         </>
       )}
     </Stack>

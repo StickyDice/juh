@@ -1,46 +1,35 @@
-import { deleteCookie } from "cookies-next";
-import { cookies } from "next/headers";
-
-interface CookieInfo {
-  name: string;
-  value: string;
-}
+import { deleteCookie, getCookie, hasCookie, setCookie } from "cookies-next";
+import { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";
 
 interface CookieOptions {
   expires: Date;
   path?: string;
 }
 
-// TODO: Переписать большинство методов на библиотеку cookies-next
+/**
+ * Caution: if used with RSC, then cookies from next/headers should be passed as context
+ */
 export class CookiesManager {
-  static get(name: string): string | undefined {
-    const store = cookies();
-    const res = store.get(name);
-    return res ? res.value : undefined;
+  static get(name: string, context?: CookieOptions): string | undefined {
+    return getCookie(name, context);
   }
-  static getAll(): Array<CookieInfo> {
-    const store = cookies();
-    return store.getAll();
+
+  static put(
+    name: string,
+    value: string,
+    options: CookieOptions,
+    context?: () => ReadonlyRequestCookies,
+  ): void {
+    context
+      ? setCookie(name, value, { ...options, cookies: context })
+      : setCookie(name, value, options);
   }
-  static put(name: string, value: string, options: CookieOptions): void {
-    try {
-      // client side :
-      document.cookie = `${name}=${value};expires=${options.expires.toUTCString()};path=/;`;
-    } catch {
-      // server side :
-      cookies().set(name, value, {
-        expires: options.expires.getTime(),
-        path: options.path || "/",
-      });
-    }
+
+  static remove(name: string, context?: () => ReadonlyRequestCookies) {
+    deleteCookie(name, { cookies: context });
   }
-  static remove(name: string) {
-    try {
-      // client side :
-      document.cookie = `${name};expires=Thu, 01 Jan 1970 00:00:00 GMT`;
-    } catch {
-      // server side :
-      deleteCookie(name, { cookies });
-    }
+
+  static isCookie(name: string, context?: () => ReadonlyRequestCookies): boolean {
+    return hasCookie(name, { cookies: context });
   }
 }

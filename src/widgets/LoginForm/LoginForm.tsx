@@ -31,6 +31,7 @@ export function LoginForm({}: LoginFormProps) {
   });
 
   const onBlurEmail = () => {
+    // TODO: Убрать валидацию Email, потому что у нас login это не email а просто набор латинских символов
     if (!validateEmail(formData.email)) setIsEmailError(true);
     else setIsEmailError(false);
   };

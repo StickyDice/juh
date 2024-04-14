@@ -1,3 +1,4 @@
+import { deleteCookie } from "cookies-next";
 import { cookies } from "next/headers";
 
 interface CookieInfo {
@@ -10,6 +11,7 @@ interface CookieOptions {
   path?: string;
 }
 
+// TODO: Переписать большинство методов на библиотеку cookies-next
 export class CookiesManager {
   static get(name: string): string | undefined {
     const store = cookies();
@@ -21,16 +23,24 @@ export class CookiesManager {
     return store.getAll();
   }
   static put(name: string, value: string, options: CookieOptions): void {
-    // client side :
-    if (document && document.cookie) {
+    try {
+      // client side :
       document.cookie = `${name}=${value};expires=${options.expires.toUTCString()};path=/;`;
-    }
-    // server side :
-    else {
+    } catch {
+      // server side :
       cookies().set(name, value, {
         expires: options.expires.getTime(),
         path: options.path || "/",
       });
+    }
+  }
+  static remove(name: string) {
+    try {
+      // client side :
+      document.cookie = `${name};expires=Thu, 01 Jan 1970 00:00:00 GMT`;
+    } catch {
+      // server side :
+      deleteCookie(name, { cookies });
     }
   }
 }

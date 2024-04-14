@@ -1,0 +1,15 @@
+.headerContainer {
+  display: flex;
+  padding: 0 16px;
+  gap: 6px 16px;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  margin-bottom: 16;
+}
+.headerButtons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 6px 16px; 
+}

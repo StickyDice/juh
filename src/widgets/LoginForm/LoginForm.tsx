@@ -1,19 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { ChangeEvent, useState } from "react";
 import { Button, Card, Link, Stack, TextField } from "@mui/material";
-import {
-  authenticationStrategy,
-  validateEmail,
-  validatePassword,
-  validatePasswordRepeat,
-} from "~/features/auth/lib";
+import { authenticationStrategy } from "~/features/auth/lib";
 import { useRouter } from "next/navigation";
 
 interface LoginFormProps {}
 
 interface FormData {
-  email: string;
+  login: string;
   password: string;
   confirm_password?: string;
 }
@@ -21,36 +16,37 @@ interface FormData {
 export function LoginForm({}: LoginFormProps) {
   const router = useRouter();
   const [isPasswordError, setIsPasswordError] = useState(false);
-  const [isEmailError, setIsEmailError] = useState(false);
+  const [isLoginError, setIsEmailError] = useState(false);
   const [isPasswordRepeatError, setIsPasswordRepeatError] = useState(false);
   const [isNewby, setIsNewby] = useState(false);
   const [formData, setFormData] = useState<FormData>({
-    email: "",
+    login: "",
     password: "",
     confirm_password: "",
   });
 
-  const onBlurEmail = () => {
-    // TODO: Убрать валидацию Email, потому что у нас login это не email а просто набор латинских символов
-    if (!validateEmail(formData.email)) setIsEmailError(true);
+  const onChangeLogin = (e: ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.value || e.target.value.length < 5) setIsEmailError(true);
     else setIsEmailError(false);
+    setFormData((prev) => ({ ...prev, login: e.target.value }));
   };
 
-  const onBlurPassword = () => {
-    if (!validatePassword(formData.password)) setIsPasswordError(true);
+  const onChangePasssword = (e: ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.value || e.target.value.length < 5) setIsPasswordError(true);
     else setIsPasswordError(false);
+    setFormData((prev) => ({ ...prev, password: e.target.value }));
   };
 
-  const onBlurPasswordRepeat = () => {
-    if (!formData.confirm_password) return;
-    if (!validatePasswordRepeat(formData.password, formData.confirm_password))
+  const onChangeConfirmPassword = (e: ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.value || e.target.value.length === 0 || e.target.value !== formData.password)
       setIsPasswordRepeatError(true);
     else setIsPasswordRepeatError(false);
+    setFormData((prev) => ({ ...prev, confirm_password: e.target.value }));
   };
 
   const onSubmit = async () => {
     const response = await authenticationStrategy(
-      { login: formData.email, password: formData.password },
+      { login: formData.login, password: formData.password },
       isNewby ? "register" : "login",
     );
     if (typeof response === "boolean") router.push("/");
@@ -65,44 +61,35 @@ export function LoginForm({}: LoginFormProps) {
         </Link>
 
         <TextField
-          label="Почта"
-          value={formData.email}
-          onChange={(e) => setFormData((d) => ({ ...d, email: e.target.value }))}
+          label="Логин"
+          value={formData.login}
+          onChange={onChangeLogin}
           variant="standard"
-          error={isEmailError}
-          inputProps={{
-            onBlur: onBlurEmail,
-          }}
+          error={isLoginError}
         />
 
         <TextField
           label="Пароль"
           value={formData.password}
-          onChange={(e) => setFormData((d) => ({ ...d, password: e.target.value }))}
+          onChange={onChangePasssword}
           type="password"
           variant="standard"
           error={isPasswordError}
-          inputProps={{
-            onBlur: onBlurPassword,
-          }}
         />
 
         {isNewby && (
           <TextField
             label="Подтверждение пароля"
             value={formData.confirm_password}
-            onChange={(e) => setFormData((d) => ({ ...d, confirm_password: e.target.value }))}
+            onChange={onChangeConfirmPassword}
             type="password"
             variant="standard"
             error={isPasswordRepeatError}
-            inputProps={{
-              onBlur: onBlurPasswordRepeat,
-            }}
           />
         )}
 
         <Button
-          disabled={isPasswordError || isEmailError || isPasswordRepeatError}
+          disabled={isPasswordError || isLoginError || isPasswordRepeatError}
           onClick={onSubmit}
         >
           {isNewby ? "Зарегистрироваться" : "Войти"}

@@ -10,7 +10,6 @@
   padding: 16px;
   width: max(80vw, 300px);
   height: 70vh;
-  /* max-height: 70dvh; */
   border: 2px dashed rgb(var(--primary-color-rgb));
   border-radius: 8px;
   transition: height .5s ease-in-out;

@@ -1,8 +1,16 @@
-export const createContainer = (files: FormData) => {
+type FileDTOType = {
+  files: {
+    name: string;
+    data: string;
+  }[];
+  title: string;
+  viewers: string[];
+};
+
+export const createContainer = (files: FileDTOType) => {
   return fetch("http://localhost:8000/containers/create", {
     method: "POST",
     credentials: "include",
-    // headers: { Cookie: cookies().toString() },
     body: JSON.stringify(files),
   });
 };

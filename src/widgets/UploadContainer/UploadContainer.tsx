@@ -14,9 +14,24 @@ import { LineDivider } from "~/shared/ui";
 import { useRouter } from "next/navigation";
 import { createContainer } from "~/services/createContainer";
 
+const getBase64 = (file: File): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    console.log("data", reader.result);
+    reader.onload = () => {
+      resolve(reader.result as string);
+    };
+    reader.onerror = reject;
+  });
+};
+
 export function UploadContainer() {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const router = useRouter();
+  const [switchChecked, setSwitchChecked] = useState(true);
+
+  const [folderName, setFolderName] = useState<string>("Название папки");
 
   const handleOnDrop = async (e: DragEvent<HTMLInputElement>) => {
     e.preventDefault();
@@ -44,10 +59,19 @@ export function UploadContainer() {
   };
 
   const onSubmit = async (e: MouseEvent<HTMLButtonElement>) => {
-    const data = new FormData();
-    selectedFiles.forEach((file) => data.append(file.name, file));
-    const containerLink = await createContainer(data).then((res) => res.json());
-    router.push(containerLink);
+    const files = [];
+    for (const file of selectedFiles) {
+      const base64File = await getBase64(file);
+      files.push({ name: file.name, data: base64File });
+    }
+    const data = {
+      files,
+      title: "Название папки",
+      viewers: [""],
+    };
+    const containerLink: string = await createContainer(data).then((res) => res.json());
+    console.log(containerLink.replace("\\", ""));
+    router.push(containerLink.replace("\\", ""));
   };
 
   const containerClassName = `${styles.smoothHeightChange} ${selectedFiles.length ? styles.uploadContainer : styles.uploadContainerEmpty}`;
@@ -87,14 +111,33 @@ export function UploadContainer() {
           <Stack className={styles.uploadedFilesTypographyContainer}>
             <Typography color="secondary">Параметры</Typography>
             <FormControlLabel
-              control={<Switch inputProps={{ "aria-label": "Доступна всем" }} />}
-              label={<Typography color="secondary">Доступна всем</Typography>}
+              control={
+                <Switch
+                  checked={switchChecked}
+                  onClick={() => setSwitchChecked(!switchChecked)}
+                  inputProps={{
+                    "aria-label": switchChecked
+                      ? "Доступна всем"
+                      : "Доступна всем, у кого есть ссылка",
+                  }}
+                />
+              }
+              label={
+                <Typography color="secondary">
+                  {switchChecked ? "Доступна всем" : "Доступна всем, у кого есть ссылка"}
+                </Typography>
+              }
             />
           </Stack>
           <LineDivider />
           <Stack className={styles.uploadedFilesTypographyContainer}>
             <Typography color="secondary">Название папки</Typography>
-            <TextField placeholder="Без названия" variant="standard" />
+            <TextField
+              value={folderName}
+              onChange={(e) => setFolderName(e.target.value)}
+              placeholder="Без названия"
+              variant="standard"
+            />
           </Stack>
           <Button variant="contained" onClick={onSubmit}>
             Загрузить

@@ -11,7 +11,6 @@ async function login(params: SignParamsType): Promise<boolean> {
     credentials: "include",
     body: JSON.stringify(params),
   }).then((response) => response.json());
-  console.log(authResult);
   return authResult;
 }
 
@@ -21,7 +20,6 @@ async function register(params: SignParamsType): Promise<boolean> {
     credentials: "include",
     body: JSON.stringify(params),
   }).then((response) => response.json());
-  console.log(registerResult);
   return registerResult;
 }
 

@@ -19,7 +19,8 @@ export default async function Page({ params }: Props) {
       deleteCookie("jwt");
       redirect("/auth");
     } else if (res.status === 404) {
-      notFound();
+      return {};
+      // notFound();
     }
 
     return await res.json();

@@ -56,7 +56,6 @@
 }
 
 .styledStack {
-
   width: 310px;
   align-items: center;
 }
@@ -84,4 +83,8 @@
   left: 0;
   opacity: 0;
   cursor: default;
+}
+
+.chipInput {
+  width: 310px;
 }

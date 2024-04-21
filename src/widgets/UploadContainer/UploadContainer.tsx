@@ -13,12 +13,12 @@ import { reachFilesFromDataTransfer } from "~/shared/utils/reachFilesFromDataTra
 import { LineDivider } from "~/shared/ui";
 import { useRouter } from "next/navigation";
 import { createContainer } from "~/services/createContainer";
+import { MuiChipsInput } from "mui-chips-input";
 
 const getBase64 = (file: File): Promise<string> => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
     reader.readAsDataURL(file);
-    console.log("data", reader.result);
     reader.onload = () => {
       resolve(reader.result as string);
     };
@@ -30,6 +30,7 @@ export function UploadContainer() {
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const router = useRouter();
   const [switchChecked, setSwitchChecked] = useState(true);
+  const [chips, setChips] = useState<string[]>([]);
 
   const [folderName, setFolderName] = useState<string>("Название папки");
 
@@ -62,15 +63,14 @@ export function UploadContainer() {
     const files = [];
     for (const file of selectedFiles) {
       const base64File = await getBase64(file);
-      files.push({ name: file.name, data: base64File });
+      files.push({ name: file.name, data: base64File.split(",")[1] });
     }
     const data = {
       files,
       title: "Название папки",
-      viewers: [""],
+      viewers: chips.length ? chips : "*",
     };
     const containerLink: string = await createContainer(data).then((res) => res.json());
-    console.log(containerLink.replace("\\", ""));
     router.push(containerLink.replace("\\", ""));
   };
 
@@ -128,6 +128,14 @@ export function UploadContainer() {
                 </Typography>
               }
             />
+            {!switchChecked && (
+              <MuiChipsInput
+                className={styles.chipInput}
+                size="small"
+                value={chips}
+                onChange={(chip) => setChips(chip)}
+              />
+            )}
           </Stack>
           <LineDivider />
           <Stack className={styles.uploadedFilesTypographyContainer}>

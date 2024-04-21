@@ -4,7 +4,7 @@ type FileDTOType = {
     data: string;
   }[];
   title: string;
-  viewers: string[];
+  viewers: string[] | string;
 };
 
 export const createContainer = (files: FileDTOType) => {

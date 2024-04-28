@@ -1,12 +1,23 @@
 "use client";
 
-import DownloadIcon from "@mui/icons-material/Download";
-import { IconButton } from "@mui/material";
+import Button from "@mui/material/Button";
+import { ReactNode } from "react";
+import { downloadContainer } from "~/services/downloadContainer";
 
-export function DownloadButton() {
+interface IDownloadButtonProps {
+  userId: string;
+  containerId: string;
+  children: ReactNode;
+}
+
+export default function DownloadButton({ userId, containerId, children }: IDownloadButtonProps) {
+  const handleDownloadContainerClick = () => {
+    downloadContainer(userId, containerId);
+  };
+
   return (
-    <IconButton>
-      <DownloadIcon />
-    </IconButton>
+    <Button color="primary" onClick={handleDownloadContainerClick}>
+      {children}
+    </Button>
   );
 }

@@ -1,7 +1,7 @@
-import { FileDownload, Delete } from "@mui/icons-material";
-import { Table, TableHead, TableRow, TableCell, TableBody, IconButton } from "@mui/material";
-import { deleteContainer } from "~/services/deleteContainer";
+import { Table, TableHead, TableRow, TableCell, TableBody } from "@mui/material";
 import "./files-table.module.css";
+import TableData from "~/views/FilesTable/TableData";
+import { cookies } from "next/headers";
 
 interface FilesTableProps {
   files: string[][];
@@ -13,13 +13,6 @@ interface FilesTableProps {
 }
 
 export default function FilesTable({ files, isOwner, containerInfo }: FilesTableProps) {
-  // TODO: Не уверен что хочу делать всю таблицу целиком client-side компонентом. Надо подумать
-
-  async function handleDeleteClick(filename: string) {
-    deleteContainer(containerInfo.userId, containerInfo.containerId, filename);
-    // TODO: Дописать логику отображения изменений
-  }
-
   return (
     <Table>
       <TableHead>
@@ -31,24 +24,12 @@ export default function FilesTable({ files, isOwner, containerInfo }: FilesTable
         </TableRow>
       </TableHead>
       <TableBody>
-        {files.map((file) => (
-          <TableRow key={`${file[0]}.${file[1]}`} sx={{ "&:hover": { background: "$f2f2f2" } }}>
-            <TableCell>{file[0]}</TableCell>
-            <TableCell>{file[1]}</TableCell>
-            <TableCell>
-              <IconButton>
-                <FileDownload />
-              </IconButton>
-            </TableCell>
-            {isOwner && (
-              <TableCell>
-                <IconButton color="error">
-                  <Delete />
-                </IconButton>
-              </TableCell>
-            )}
-          </TableRow>
-        ))}
+        <TableData
+          containerFiles={files}
+          isOwner={isOwner}
+          containerInfo={containerInfo}
+          cookie={cookies().toString()}
+        />
       </TableBody>
     </Table>
   );

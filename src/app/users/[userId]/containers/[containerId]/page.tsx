@@ -1,11 +1,14 @@
 "use server";
 
-import { Button, Card, Typography } from "@mui/material";
+import { Card, Typography } from "@mui/material";
 import { deleteCookie } from "cookies-next";
 import { notFound, redirect } from "next/navigation";
 import { ContainerInfo, getContainerInfo } from "~/services/getContainerInfo";
 import styles from "./styles.module.css";
 import FilesTable from "~/views/FilesTable";
+import DownloadButton from "~/views/FilesTable/DownloadButton";
+import { cookies } from "next/headers";
+import DeleteButton from "~/views/FilesTable/DeleteButton";
 
 type Props = {
   params: { userId: string; containerId: string };
@@ -19,8 +22,7 @@ export default async function Page({ params }: Props) {
       deleteCookie("jwt");
       redirect("/auth");
     } else if (res.status === 404) {
-      return {};
-      // notFound();
+      notFound();
     }
 
     return await res.json();
@@ -41,13 +43,17 @@ export default async function Page({ params }: Props) {
           {data.title}
         </Typography>
         <div className={styles.headerButtons}>
-          <Button color="primary">
+          <DownloadButton userId={params.userId} containerId={params.containerId}>
             <Typography>Скачать папку</Typography>
-          </Button>
+          </DownloadButton>
           {data.isOwner && (
-            <Button color="error">
-              <Typography>удалить папку</Typography>
-            </Button>
+            <DeleteButton
+              userId={params.userId}
+              containerId={params.containerId}
+              cookie={cookies().toString()}
+            >
+              <Typography>Удалить папку</Typography>
+            </DeleteButton>
           )}
         </div>
       </div>

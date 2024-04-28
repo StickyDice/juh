@@ -1,16 +1,33 @@
 "use client";
 
-import Delete from "@mui/icons-material/Delete";
-import { IconButton } from "@mui/material";
+import Button from "@mui/material/Button";
+import { useRouter } from "next/navigation";
+import { ReactNode } from "react";
+import { deleteContainer } from "~/services/deleteContainer";
 
-export function DeleteButton({ filename }: { filename: string }) {
-  const handleDeleteAction = () => {
-    // deleteContainer()
+interface IRemoveButtonProps {
+  userId: string;
+  containerId: string;
+  cookie: string;
+  filename?: string;
+  children: ReactNode;
+}
+
+export default function DeleteButton({
+  userId,
+  containerId,
+  cookie,
+  children,
+}: IRemoveButtonProps) {
+  const router = useRouter();
+  const handleDeleteContainerClick = () => {
+    deleteContainer(userId, containerId, cookie);
+    router.push("/");
   };
 
   return (
-    <IconButton>
-      <Delete />
-    </IconButton>
+    <Button color="error" onClick={handleDeleteContainerClick}>
+      {children}
+    </Button>
   );
 }

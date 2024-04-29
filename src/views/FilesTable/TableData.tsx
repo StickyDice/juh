@@ -2,29 +2,30 @@
 
 import Delete from "@mui/icons-material/Delete";
 import FileDownload from "@mui/icons-material/FileDownload";
+import Button from "@mui/material/Button";
 import TableCell from "@mui/material/TableCell";
 import TableRow from "@mui/material/TableRow";
 import { useState } from "react";
 import { deleteContainer } from "~/services/deleteContainer";
-import DeleteButton from "~/views/FilesTable/DeleteButton";
 import DownloadButton from "~/views/FilesTable/DownloadButton";
 
 interface ITableDataProps {
   containerFiles: string[][];
   isOwner: boolean;
   containerInfo: { userId: string; containerId: string };
-  cookie: string;
 }
 
-export default function TableData({
-  isOwner,
-  containerFiles,
-  containerInfo,
-  cookie,
-}: ITableDataProps) {
-  async function handleDeleteClick(filename: string) {
-    deleteContainer(containerInfo.userId, containerInfo.containerId, filename);
-    // TODO: Дописать логику отображения изменений
+export default function TableData({ isOwner, containerFiles, containerInfo }: ITableDataProps) {
+  async function handleDeleteClick(filename: string, fileExtenstion: string) {
+    const response = await deleteContainer(
+      containerInfo.userId,
+      containerInfo.containerId,
+      `${filename}.${fileExtenstion}`,
+    );
+
+    if (!response) return;
+
+    setFiles(files.filter((file) => file[0] !== filename && file[1] !== fileExtenstion));
   }
 
   const [files, setFiles] = useState(containerFiles);
@@ -36,20 +37,19 @@ export default function TableData({
           <TableCell>{file[0]}</TableCell>
           <TableCell>{file[1]}</TableCell>
           <TableCell>
-            <DownloadButton userId={containerInfo.userId} containerId={containerInfo.containerId}>
+            <DownloadButton
+              userId={containerInfo.userId}
+              containerId={containerInfo.containerId}
+              filename={`${file[0]}.${file[1]}`}
+            >
               <FileDownload />
             </DownloadButton>
           </TableCell>
           {isOwner && (
             <TableCell>
-              <DeleteButton
-                userId={containerInfo.userId}
-                containerId={containerInfo.containerId}
-                filename={`${file[0]}.${file[1]}`}
-                cookie={cookie}
-              >
+              <Button color="error" onClick={() => handleDeleteClick(file[0], file[1])}>
                 <Delete />
-              </DeleteButton>
+              </Button>
             </TableCell>
           )}
         </TableRow>

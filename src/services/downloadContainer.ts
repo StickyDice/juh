@@ -1,4 +1,4 @@
-function download(blob, filename) {
+function download(blob: Blob, filename: string) {
   const url = window.URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.style.display = "none";
@@ -11,11 +11,7 @@ function download(blob, filename) {
   window.URL.revokeObjectURL(url);
 }
 
-export const downloadContainer = async (
-  userId: string,
-  containerId: string,
-  filename?: string,
-): Promise<string> => {
+export const downloadContainer = async (userId: string, containerId: string, filename?: string) => {
   return fetch(
     `http://localhost:8000/users/${userId}/containers/${containerId}/download${filename ? `?filename${encodeURIComponent(filename)}` : ""}`,
     {
@@ -24,5 +20,5 @@ export const downloadContainer = async (
     },
   )
     .then((response) => response.blob())
-    .then((blob) => download(blob, "new folder"));
+    .then((blob) => download(blob, filename ?? "new folder"));
 };

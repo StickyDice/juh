@@ -1,7 +1,6 @@
 import { Table, TableHead, TableRow, TableCell, TableBody } from "@mui/material";
 import "./files-table.module.css";
 import TableData from "~/views/FilesTable/TableData";
-import { cookies } from "next/headers";
 
 interface FilesTableProps {
   files: string[][];
@@ -24,12 +23,7 @@ export default function FilesTable({ files, isOwner, containerInfo }: FilesTable
         </TableRow>
       </TableHead>
       <TableBody>
-        <TableData
-          containerFiles={files}
-          isOwner={isOwner}
-          containerInfo={containerInfo}
-          cookie={cookies().toString()}
-        />
+        <TableData containerFiles={files} isOwner={isOwner} containerInfo={containerInfo} />
       </TableBody>
     </Table>
   );

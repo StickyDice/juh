@@ -1,10 +1,4 @@
-export const deleteContainer = function (
-  userId: string,
-  containerId: string,
-  cookie: string,
-  filename?: string,
-) {
-  console.log("cookie", cookie);
+export const deleteContainer = function (userId: string, containerId: string, filename?: string) {
   return fetch(
     `http://localhost:8000/users/${userId}/containers/${containerId}${
       filename ? `?filename=${encodeURIComponent(filename)}` : ""
@@ -12,7 +6,9 @@ export const deleteContainer = function (
     {
       method: "DELETE",
       credentials: "include",
-      headers: { Cookie: cookie },
+      headers: {
+        "Content-Type": "application/json",
+      },
     },
-  );
+  ).then((response) => response.json());
 };

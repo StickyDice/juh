@@ -7,12 +7,18 @@ import { downloadContainer } from "~/services/downloadContainer";
 interface IDownloadButtonProps {
   userId: string;
   containerId: string;
+  filename?: string;
   children: ReactNode;
 }
 
-export default function DownloadButton({ userId, containerId, children }: IDownloadButtonProps) {
+export default function DownloadButton({
+  userId,
+  containerId,
+  filename,
+  children,
+}: IDownloadButtonProps) {
   const handleDownloadContainerClick = () => {
-    downloadContainer(userId, containerId);
+    downloadContainer(userId, containerId, filename);
   };
 
   return (

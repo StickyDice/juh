@@ -8,7 +8,6 @@ import { deleteContainer } from "~/services/deleteContainer";
 interface IRemoveButtonProps {
   userId: string;
   containerId: string;
-  cookie: string;
   filename?: string;
   children: ReactNode;
 }
@@ -16,13 +15,13 @@ interface IRemoveButtonProps {
 export default function DeleteButton({
   userId,
   containerId,
-  cookie,
   children,
+  filename,
 }: IRemoveButtonProps) {
   const router = useRouter();
   const handleDeleteContainerClick = () => {
-    deleteContainer(userId, containerId, cookie);
-    router.push("/");
+    deleteContainer(userId, containerId, filename);
+    if (!filename) router.push("/");
   };
 
   return (

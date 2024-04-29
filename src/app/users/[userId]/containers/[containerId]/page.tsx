@@ -7,15 +7,12 @@ import { ContainerInfo, getContainerInfo } from "~/services/getContainerInfo";
 import styles from "./styles.module.css";
 import FilesTable from "~/views/FilesTable";
 import DownloadButton from "~/views/FilesTable/DownloadButton";
-import { cookies } from "next/headers";
 import DeleteButton from "~/views/FilesTable/DeleteButton";
 
 type Props = {
   params: { userId: string; containerId: string };
 };
 export default async function Page({ params }: Props) {
-  // TODO: Возможно не получится оставить страницу server-side компонентом. Надо подумать как лучше сделать
-
   async function getData() {
     const res = await getContainerInfo(params.userId, params.containerId);
     if (res.status === 401) {
@@ -47,11 +44,7 @@ export default async function Page({ params }: Props) {
             <Typography>Скачать папку</Typography>
           </DownloadButton>
           {data.isOwner && (
-            <DeleteButton
-              userId={params.userId}
-              containerId={params.containerId}
-              cookie={cookies().toString()}
-            >
+            <DeleteButton userId={params.userId} containerId={params.containerId}>
               <Typography>Удалить папку</Typography>
             </DeleteButton>
           )}

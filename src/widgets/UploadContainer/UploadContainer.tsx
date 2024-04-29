@@ -63,7 +63,6 @@ export function UploadContainer() {
     const files = [];
     for (const file of selectedFiles) {
       const base64File = await getBase64(file);
-      console.log("base64", base64File);
       files.push({ name: file.name, data: base64File.split(",")[1] });
     }
     const data = {

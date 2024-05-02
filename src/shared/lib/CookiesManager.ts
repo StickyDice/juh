@@ -1,4 +1,4 @@
-import { deleteCookie, getCookie, hasCookie, setCookie } from "cookies-next";
+import { deleteCookie, getCookie, hasCookie, setCookie, getCookies } from "cookies-next";
 import { ReadonlyRequestCookies } from "next/dist/server/web/spec-extension/adapters/request-cookies";
 
 interface CookieOptions {
@@ -31,5 +31,12 @@ export class CookiesManager {
 
   static isCookie(name: string, context?: () => ReadonlyRequestCookies): boolean {
     return hasCookie(name, { cookies: context });
+  }
+
+  static toString() {
+    const res = getCookies();
+    return Object.keys(res)
+      .map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(res[key] as string)}`)
+      .join(";");
   }
 }

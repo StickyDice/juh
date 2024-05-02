@@ -15,6 +15,7 @@ interface ITableDataProps {
   containerInfo: { userId: string; containerId: string };
 }
 
+// TODO: Переделать пол компонента в server-side, client-side оставить только кнопки
 export default function TableData({ isOwner, containerFiles, containerInfo }: ITableDataProps) {
   async function handleDeleteClick(filename: string, fileExtenstion: string) {
     const response = await deleteContainer(

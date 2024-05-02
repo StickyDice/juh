@@ -7,9 +7,12 @@ export type ContainerInfo = {
 };
 
 export const getContainerInfo = function (userId: string, containerId: string) {
-  return fetch(`http://localhost:8000/users/${userId}/containers/${containerId}`, {
-    method: "GET",
-    credentials: "include",
-    headers: { Cookie: cookies().toString() },
-  });
+  return fetch(
+    `http://localhost:8000/users/${encodeURIComponent(userId)}/containers/${encodeURIComponent(containerId)}`,
+    {
+      method: "GET",
+      credentials: "include",
+      headers: { Cookie: cookies().toString() },
+    },
+  );
 };

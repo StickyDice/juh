@@ -1,24 +1,17 @@
-function download(blob: Blob, filename: string) {
-  const url = window.URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.style.display = "none";
-  a.href = url;
-  // the filename you want
-  a.download = filename;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  window.URL.revokeObjectURL(url);
-}
+"use client";
+import { blobToDownload } from "~/shared/utils/blobToDownload";
 
 export const downloadContainer = async (userId: string, containerId: string, filename?: string) => {
   return fetch(
-    `http://localhost:8000/users/${userId}/containers/${containerId}/download${filename ? `?filename${encodeURIComponent(filename)}` : ""}`,
+    `http://localhost:8000/users/${encodeURIComponent(userId)}/containers/${encodeURIComponent(containerId)}/download${filename ? `?filename=${encodeURIComponent(filename)}` : ""}`,
     {
       method: "GET",
       credentials: "include",
     },
   )
-    .then((response) => response.blob())
-    .then((blob) => download(blob, filename ?? "new folder"));
+    .then(async (res) => ({
+      stream: await res.blob(),
+      filename: res.headers.get("Content-Disposition")?.split("filename=")[1] || "file",
+    }))
+    .then((data) => blobToDownload(data.stream, data.filename));
 };

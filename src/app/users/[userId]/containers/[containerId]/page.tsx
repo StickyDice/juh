@@ -17,6 +17,7 @@ export default async function Page({ params }: Props) {
     const res = await getContainerInfo(params.userId, params.containerId);
     if (res.status === 401) {
       deleteCookie("jwt");
+      // TODO: Добавить что-то типа history.pushState
       redirect("/auth");
     } else if (res.status === 404) {
       notFound();

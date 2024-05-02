@@ -1,6 +1,8 @@
+"use client";
+
 export const deleteContainer = function (userId: string, containerId: string, filename?: string) {
   return fetch(
-    `http://localhost:8000/users/${userId}/containers/${containerId}${
+    `http://localhost:8000/users/${encodeURIComponent(userId)}/containers/${encodeURIComponent(containerId)}${
       filename ? `?filename=${encodeURIComponent(filename)}` : ""
     }`,
     {

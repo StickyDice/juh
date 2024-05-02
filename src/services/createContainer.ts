@@ -1,3 +1,5 @@
+"use client";
+
 type FileDTOType = {
   files: {
     name: string;
